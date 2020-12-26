@@ -19,7 +19,7 @@ class App(QWidget):
 
         # Listen for exit shortcut
         self.exit_shortcut = QShortcut(QKeySequence(exit_shortcut_conf), self)
-        self.exit_shortcut.activated.connect(self.exit_app)
+        self.exit_shortcut.activated.connect(self.close_window)
 
         # window init
         self.initUI()
@@ -55,7 +55,7 @@ class App(QWidget):
         return f[0]
 
     @pyqtSlot()
-    def exit_app(self):
+    def close_window(self):
         if self.main:
             # TODO: prevent closing if there are unsaved changes
             pass
