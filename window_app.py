@@ -1,16 +1,25 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QPushButton, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QPushButton, QLabel, QVBoxLayout, QShortcut
+from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import pyqtSlot, Qt
 import sys
 
+exit_shortcut_conf = "Ctrl+Q"
 
 class App(QWidget):
     # ^ vs Window(QMainWindow)?
-    def __init__(self):
+    def __init__(self, main_window=False):
         super().__init__()
         # window props
         self.title = "PDF opener"
         self.height = 600
         self.width = 900
+
+        # remember if it is main window
+        self.main = main_window
+
+        # Listen for exit shortcut
+        self.exit_shortcut = QShortcut(QKeySequence(exit_shortcut_conf), self)
+        self.exit_shortcut.activated.connect(self.close_window)
 
         # window init
         self.initUI()
@@ -45,8 +54,15 @@ class App(QWidget):
 
         return f[0]
 
+    @pyqtSlot()
+    def close_window(self):
+        if self.main:
+            # TODO: prevent closing if there are unsaved changes
+            pass
+
+        self.close()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    ex = App()
+    ex = App(True)
     sys.exit(app.exec_())
